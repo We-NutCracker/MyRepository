@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- Spring自动隐式配置beans -->
+		<bean id="cat" class="MS.MS_2.cat"></bean>
+		<bean id="dog" class="MS.MS_2.dog"></bean>
+		
+		<bean id="people" class="MS.MS_2.people" autowire="byName">
+		<property name="name" value="阿野"></property>
+		</bean>
+		<!-- 
+		autowire 自动装配 
+		byName会自动在容器上下文中查找和自己对象set方法后面的值对应的beanid并且不区分大小写
+		id要唯一并且要和自动注入的属性的set方法的值一致
+		byType会找和自己对象属性类型相同的bean 
+		类型全局唯一并且要和自动注入的属性的类型方法的值一致
+		 -->
+</bean>
+</beans>
