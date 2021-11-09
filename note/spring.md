@@ -442,22 +442,56 @@ ApplicationContext context=new  AnnotationConfigApplicationContext(config.class)
 
 **开闭原则，增加功能：**代理类除了是客户类和委托类的中介之外，我们还可以通过给代理类增加额外的功能来扩展委托类的功能，这样做我们只需要修改代理类而不需要再修改委托类，符合代码设计的开闭原则。代理类主要负责为委托类预处理消息、过滤消息、把消息转发给委托类，以及事后对返回结果的处理等。代理类本身并不真正实现服务，而是同过调用委托类的相关方法，来提供特定的服务。真正的业务功能还是由委托类来实现，但是可以在业务功能执行的前后加入一些公共的服务。例如我们想给项目加入缓存、日志这些功能，我们就可以使用代理类来完成，而没必要打开已经封装好的委托类
 
+## 3.2静态代理
+
+新增一个代理类，只能为一个类进行代理
+
+## 3.3动态代理
+
+### jdk代理
+
+本体必须实现接口
+
 ```
-//public static Object newProxyInstance(ClassLoader loader,
-//Class<?>[] interfaces,
-//InvocationHandler h) {
-//Objects.requireNonNull(h);
-//
-//final Class<?> caller = System.getSecurityManager() == null
-//? null
-//: Reflection.getCallerClass();
-//
-///*
-//* Look up or generate the designated proxy class and its constructor.
-//*/
-//Constructor<?> cons = getProxyConstructor(caller, loader, interfaces);
-//
-//return newProxyInstance(caller, cons, h);
-//}
+//这是根据调用类的不同生成不同的代理类的程序
+public class ProxyInvocation implements InvocationHandler{
+
+	//被代理的接口
+	private Rent rent;
+	public void setRent(Rent rent) {
+		this.rent = rent;
+	}
+	//生成代理类
+	public Object getProxy()
+	{
+		//Proxy提供了创建动态代理类和实例的静态方法newProxyInstance（）
+		return 	Proxy.newProxyInstance(this.getClass().getClassLoader(), rent.getClass().getInterfaces(), this);
+		该方法的返回值是一个obj类型，用于在invoke的第一个参数 
+  		loader:一个ClassLoader对象，定义了由哪个ClassLoader对象来对生成的代理对象进行加载也就是真实类
+		interfaces:一个Interface对象的数组，表示的是我将要给我需要代理的对象提供一组什么接口，如果我提供了一组接口给它，那么这个代理对象就宣称实现了该接口(多态)，这样我就能调用这组接口中的方法了 
+		h: 一个InvocationHandler对象，表示的是当我这个动态代理对象在调用方法的时候，会关联到哪一个InvocationHandler对象上
+		
+	}
+	//处理代理实例并返回结果,这个invoke是接口invocationHandler的方法，因为继承了这个接口所以要重写invoke
+	@Override
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		// TODO Auto-generated method stub
+		Object resultObject=method.invoke(rent, args);//invoke的作用是调用实现类的方法
+		return resultObject;
+		当我们通过代理对象调用一个方法的时候，这个方法的调用就会被转发为由InvocationHandler这个接口的 invoke 方法来进行调用。
+		proxy：被代理的真实对象
+		method：调用的真实对象的方法的值
+		args：方法的参数
+	}
+
+}
+```
+
+### CGlib代理
+
+第三方jar包
+
+```
+
 ```
 
