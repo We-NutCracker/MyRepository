@@ -2,6 +2,11 @@
 
 ```
 //创建的Maven包里要有Maven dependencies库
+ 	<dependency>
+  	<groupId>org.aspectj</groupId>
+  		<artifactId>aspectjweaver</artifactId>
+  		<version>1.9.4</version>
+  	</dependency>
 <dependencies>
     <dependency>
     	<groupId>org.springframework</groupId>
@@ -495,3 +500,39 @@ public class ProxyInvocation implements InvocationHandler{
 
 ```
 
+# AOP
+
+## aopxml模板
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+        		<!-- 注册bean -->
+ 		<bean id="serviceimpl" class="service.serviceimpl"></bean>
+ 		<bean id="log" class="log.Log"></bean>
+		<bean id="afterlog" class="log.AfterLog"></bean>
+		<!-- 配置aop:导入aop的约束 -->
+		<aop:config>
+		<aop:pointcut expression="ex" id=""/>
+		</aop:config>
+</beans>
+```
+
+
+
+## 1使用spring实现aop（实现spring接口）
+
+## 2使用自定义类实现（切面定义）
+
+## 3使用注解实现
